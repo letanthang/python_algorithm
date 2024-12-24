@@ -3,27 +3,29 @@ import networkx as nx
 
 
 parents = []
-subPaths = [2, 5]
+subPaths = [3, 4, 33]
 
 
-def dfs(index, parent_nodes):
+def dfs(index, parent_node_values):
     if index >= len(binary_tree):
         return
 
-    parent_nodes.append(index)
-    if binary_tree[index] == subPaths[len(subPaths) - 1]:
-        if check_match(parent_nodes, subPaths):
-            print(parent_nodes)
+    parent_node_values.append(binary_tree[index])
 
     # highlight the visited path
     if index != 0:
         parent = (index - 1) // 2
         update_edge(G, (parent, index))
 
-    dfs(index * 2 + 1, parent_nodes)
-    dfs(index * 2 + 2, parent_nodes)
+    # find the subPaths
+    if binary_tree[index] == subPaths[len(subPaths) - 1]:
+        if check_match(parent_node_values, subPaths):
+            update_vertex(G, index)
 
-    parent_nodes.pop()
+    dfs(index * 2 + 1, parent_node_values)
+    dfs(index * 2 + 2, parent_node_values)
+
+    parent_node_values.pop()
 
 
 def build_graph(index):
@@ -36,6 +38,12 @@ def build_graph(index):
     build_graph(index * 2 + 2)
 
 
+def update_vertex(G, node):
+    nx.draw_networkx_nodes(G, position, nodelist=[node], node_color="blue", ax=ax)
+    plt.draw()
+    plt.pause(1)
+
+
 def update_edge(G, edge):
     nx.draw_networkx_edges(G, position, edgelist=[edge], edge_color="red", ax=ax)
     plt.draw()
@@ -45,13 +53,12 @@ def update_edge(G, edge):
 def update(G):
     ax.clear()
 
-    nx.draw(
-        G,
-        position,
-        with_labels=True,
-        node_color="lightblue",
-        ax=ax,
-    )
+    # draw edges
+    nx.draw(G, position, with_labels=False, node_color="lightblue", ax=ax)
+
+    # draw vertex label
+    custom_labels = to_labels(binary_tree)
+    nx.draw_networkx_labels(G, position, labels=custom_labels, font_color="black")
     plt.draw()
     plt.pause(1)
 
@@ -66,14 +73,20 @@ def prepare_pos(index, x, y, delta):
     prepare_pos(index * 2 + 2, x + delta, y - 1, delta / 2)
 
 
-def check_match(nodes, sub_paths):
-    if len(sub_paths) > len(nodes):
+def check_match(node_values, sub_paths):
+    if len(sub_paths) > len(node_values):
         return False
+    node_values.reverse()
+    sub_paths.reverse()
 
-    for i in reversed(range(len(sub_paths))):
-        if nodes[i] != sub_paths[i]:
+    for i in range(len(sub_paths)):
+        if node_values[i] != sub_paths[i]:
             return False
     return True
+
+
+def to_labels(arr):
+    return {i: arr[i] for i in range(len(arr))}
 
 
 binary_tree = [3, 7, 4, 9, 6, 11, 33, 6]
