@@ -2,15 +2,16 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 
-parents = []
-subPaths = [3, 4, 33]
+subPaths = [4, 11]
 
 
 def dfs(index, parent_node_values):
     if index >= len(binary_tree):
         return
 
-    parent_node_values.append(binary_tree[index])
+    # assign statement always create a new variable - can't use append
+    parent_node_values = parent_node_values + [binary_tree[index]]
+    print(parent_node_values)
 
     # highlight the visited path
     if index != 0:
@@ -24,8 +25,6 @@ def dfs(index, parent_node_values):
 
     dfs(index * 2 + 1, parent_node_values)
     dfs(index * 2 + 2, parent_node_values)
-
-    parent_node_values.pop()
 
 
 def build_graph(index):
@@ -47,7 +46,7 @@ def update_vertex(G, node):
 def update_edge(G, edge):
     nx.draw_networkx_edges(G, position, edgelist=[edge], edge_color="red", ax=ax)
     plt.draw()
-    plt.pause(1)
+    plt.pause(2)
 
 
 def update(G):
@@ -76,11 +75,11 @@ def prepare_pos(index, x, y, delta):
 def check_match(node_values, sub_paths):
     if len(sub_paths) > len(node_values):
         return False
-    node_values.reverse()
-    sub_paths.reverse()
+    parents = node_values[::-1]
+    path = sub_paths[::-1]
 
-    for i in range(len(sub_paths)):
-        if node_values[i] != sub_paths[i]:
+    for i in range(len(path)):
+        if parents[i] != path[i]:
             return False
     return True
 
@@ -100,7 +99,7 @@ prepare_pos(0, 0.5, 0.98, 0.01)
 build_graph(0)
 update(G)
 
-dfs(0, parents)
+dfs(0, [])
 
 plt.ioff()
 plt.show()
