@@ -1,7 +1,7 @@
 class DisjointSet:
     def __init__(self, n):
         self.parent = list(range(n))  # Each element is initially its own parent
-        self.rank = [0] * n  # Rank for each element is initially zero
+        self.size = [1] * n  # Rank for each element is initially zero
 
     def find(self, x):
         if self.parent[x] != x:
@@ -14,21 +14,20 @@ class DisjointSet:
         root_y = self.find(y)
 
         if root_x != root_y:
-            # Union by rank
-            if self.rank[root_x] < self.rank[root_y]:
+            # Union by size
+            if self.size[root_x] < self.size[root_y]:
                 self.parent[root_x] = root_y
-            elif self.rank[root_x] > self.rank[root_y]:
-                self.parent[root_y] = root_x
+                self.size[root_y] += self.size[root_x]
             else:
                 self.parent[root_y] = root_x
-                self.rank[root_x] += 1
+                self.size[root_x] += self.size[root_y]
 
     def is_connected(self, x, y):
         return self.find(x) == self.find(y)
 
     def debug(self):
         print("P Array:", self.parent)
-        print("R Array:", self.rank)
+        print("R Array:", self.size)
         print("----------------------------")
 
     def get_sets(self):

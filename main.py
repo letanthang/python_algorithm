@@ -13,7 +13,7 @@ def play_with_disjoint_set():
     print("Is 0 connected to 4:", ds.is_connected(0, 4))  # True
     print("Is 1 connected to 4:", ds.is_connected(1, 4))  # False
 
-    ds.print_all()
+    ds.debug()
     ds.print_sets()
 
 
