@@ -65,15 +65,19 @@ def draw(G, pos):
     # Highlight path edges in red
     nx.draw_networkx_edges(G, pos, edgelist=path_edges, edge_color="red", width=2)
 
-    # Highlight the current node in green
-    # if current_node is not None:
-    #     nx.draw_networkx_nodes(
-    #         G, pos, nodelist=[current_node], node_color="green", node_size=700
-    #     )
-
     # Draw edge labels (weights)
     edge_labels = nx.get_edge_attributes(G, "weight")
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color="black")
 
-    plt.pause(1)
+    plt.pause(1.5)
     plt.draw()
+
+
+edges = [Edge(0, 1, 4), Edge(0, 2, 4), Edge(1, 2, 2), Edge(1, 3, 6), Edge(2, 3, 8)]
+# draw_graph_with_edges(edges)
+
+mst = kruskal(4, edges)
+for edge in mst:
+    print(f"Edge: ({edge.u}, {edge.v}), Weight: {edge.weight}")
+
+plt.show()
