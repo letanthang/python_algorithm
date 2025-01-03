@@ -1,6 +1,4 @@
 import numpy as np
-import tensorly as tl
-from fontTools.misc.cython import returns
 from tensorly.decomposition import parafac
 import matplotlib.pyplot as plt
 
@@ -17,7 +15,6 @@ def import_adjacency_list(file_path):
     return matrix
 
 
-# Step 1: Tạo tensor dữ liệu kích thước 2x10x10
 np.random.seed(42)
 
 # Tensor với giá trị nhị phân và nhiễu nhỏ
@@ -26,8 +23,7 @@ det = np.linalg.det(tensor_data)
 print(det)
 print("Tensor Data Shape:", tensor_data.shape)
 
-# Step 2: Thực hiện CP decomposition với rank cố định (ví dụ rank = 3)
-rank = 11  # Số cộng đồng giả định
+rank = 11
 weights, factors = parafac(tensor_data, rank=rank, init="random", verbose=0)
 
 # Ma trận yếu tố cho Mode-1 (node)
@@ -35,7 +31,6 @@ node_factors = factors[1]
 print("\nNode Factor Matrix:")
 print(node_factors)
 
-# Step 3: Xác định node có thuộc cộng đồng nào không
 threshold = 0.2  # Ngưỡng xác định
 community_assignments = (node_factors > threshold).astype(int)
 
@@ -51,7 +46,6 @@ for i, node in enumerate(community_assignments):
     else:
         print(f"Node {i+1} does not belong to any community.")
 
-# Step 4: Trực quan hóa bằng biểu đồ scatter plot
 colors = ["red", "blue", "green"]  # Màu sắc tương ứng với cộng đồng 1, 2, 3
 plt.figure(figsize=(8, 6))
 
