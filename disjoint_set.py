@@ -1,8 +1,7 @@
-
 class DisjointSet:
     def __init__(self, n):
         self.parent = list(range(n))  # Each element is initially its own parent
-        self.rank = [0] * n           # Rank for each element is initially zero
+        self.rank = [0] * n  # Rank for each element is initially zero
 
     def find(self, x):
         if self.parent[x] != x:
@@ -10,6 +9,7 @@ class DisjointSet:
         return self.parent[x]
 
     def union(self, x, y):
+        print("union :", x, y)
         root_x = self.find(x)
         root_y = self.find(y)
 
@@ -26,9 +26,9 @@ class DisjointSet:
     def is_connected(self, x, y):
         return self.find(x) == self.find(y)
 
-    def print_all(self):
-        print("Parent Array:", self.parent)
-        print("Rank Array:", self.rank)
+    def debug(self):
+        print("P Array:", self.parent)
+        print("R Array:", self.rank)
         print("----------------------------")
 
     def get_sets(self):
@@ -46,3 +46,19 @@ class DisjointSet:
         sets = self.get_sets()
         for s in sets:
             print("Root:", s[0], "Members:", s)
+
+
+# ds = DisjointSet(7)
+# ds.debug()
+#
+# ds.union(0, 2)
+# ds.union(4, 2)
+# ds.union(3, 1)
+# ds.union(5, 6)
+# ds.union(4, 6)
+#
+# print("Is 0 connected to 4:", ds.is_connected(0, 4))  # True
+# print("Is 1 connected to 4:", ds.is_connected(1, 4))  # False
+#
+# ds.debug()
+# ds.print_sets()
